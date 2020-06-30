@@ -1,4 +1,4 @@
-package main
+package tinker
 
 import(
 	"fmt"
@@ -12,13 +12,13 @@ var ipcon ipconnection.IPConnection
 var lineBuffer = []string{"","","",""}
 var bufferIndex = 0
 
-func InitDisplay(){
+func InitDisplay(addr string, uid string) {
 
 	ipcon = ipconnection.New()
 
-	lcd, _ = lcd_20x4_bricklet.New(UID, &ipcon) // Create device object.
+	lcd, _ = lcd_20x4_bricklet.New(uid, &ipcon) // Create device object.
 
-	ipcon.Connect(ADDR) // Connect to brickd.
+	ipcon.Connect(addr) // Connect to brickd.
 	// Don't use device before ipcon is connected.
 
 	lcd.BacklightOn()
@@ -40,9 +40,9 @@ func AppendText( text string ){
 
 func writeLines(){
 	writeLine(lineBuffer[bufferIndex], 0)
-	writeLine(lineBuffer[(bufferIndex + 1) % 4], 1)
-	writeLine(lineBuffer[(bufferIndex + 2) % 4], 2)
-	writeLine(lineBuffer[(bufferIndex + 3) % 4], 3)
+	writeLine(lineBuffer[(bufferIndex+ 1) % 4], 1)
+	writeLine(lineBuffer[(bufferIndex+ 2) % 4], 2)
+	writeLine(lineBuffer[(bufferIndex+ 3) % 4], 3)
 }
 
 func writeLine( text string, line int ){

@@ -1,4 +1,4 @@
-package main
+package restServer
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"html"
 	"log"
 	"net/http"
+	"piDisplay/cmd/tinker"
 )
 
 func StartRESTServer(address string){
@@ -32,14 +33,14 @@ func handleRootAccess(w http.ResponseWriter, r *http.Request) {
 }
 
 func activate(w http.ResponseWriter, r *http.Request){
-	ActivateDisplay()
+	tinker.ActivateDisplay()
 }
 
 func deactivate(w http.ResponseWriter, r *http.Request){
-	DeactivateDisplay()
+	tinker.DeactivateDisplay()
 }
 
 func appendLine(w http.ResponseWriter, r *http.Request){
 	vars := mux.Vars(r)
-	AppendText(vars["text"])
+	tinker.AppendText(vars["text"])
 }
