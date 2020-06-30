@@ -9,6 +9,9 @@ import(
 var lcd lcd_20x4_bricklet.LCD20x4Bricklet
 var ipcon ipconnection.IPConnection
 
+var lineBuffer = []string{"","","",""}
+var bufferIndex = 0
+
 func InitDisplay(){
 
 	ipcon = ipconnection.New()
@@ -17,7 +20,6 @@ func InitDisplay(){
 
 	ipcon.Connect(ADDR) // Connect to brickd.
 	// Don't use device before ipcon is connected.
-
 
 	lcd.BacklightOn()
 	lcd.RegisterButtonPressedCallback(func(button uint8) {
@@ -29,10 +31,24 @@ func InitDisplay(){
 	})
 }
 
-func WriteLine( text string, line int ){
+func AppendText( text string ){
+	lineBuffer[bufferIndex] = text
+	bufferIndex = (bufferIndex + 1) % 4
+	lcd.ClearDisplay()
+	writeLines()
+}
+
+func writeLines(){
+	writeLine(lineBuffer[bufferIndex], 0)
+	writeLine(lineBuffer[(bufferIndex + 1) % 4], 1)
+	writeLine(lineBuffer[(bufferIndex + 2) % 4], 2)
+	writeLine(lineBuffer[(bufferIndex + 3) % 4], 3)
+}
+
+func writeLine( text string, line int ){
 	if len(text) > 20 {
 		runes := []rune(text)
-		text = string(runes[0:19])
+		text = string(runes[0:20])
 	}
 	lcd.WriteLine(uint8(line), 0, text)
 }

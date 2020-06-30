@@ -13,11 +13,11 @@ func StartRESTServer(address string){
 	r := mux.NewRouter()
 	r.HandleFunc("/activate", activate)
 	r.HandleFunc("/deactivate", deactivate)
-	r.HandleFunc("/write/{text}", appendLine)
+	r.HandleFunc("/append/{text}", appendLine)
 	http.Handle("/", r)
 
 
-	log.Println("Listening on %q", address)
+	log.Printf("Listening on %q", address)
 	log.Fatal(http.ListenAndServe(address, nil))
 }
 
@@ -41,5 +41,5 @@ func deactivate(w http.ResponseWriter, r *http.Request){
 
 func appendLine(w http.ResponseWriter, r *http.Request){
 	vars := mux.Vars(r)
-	WriteLine(vars["text"], 0)
+	AppendText(vars["text"])
 }
