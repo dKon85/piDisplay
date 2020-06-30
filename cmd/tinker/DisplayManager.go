@@ -9,9 +9,11 @@ import(
 var lcd lcd_20x4_bricklet.LCD20x4Bricklet
 var ipcon ipconnection.IPConnection
 
+//Ringbuffer to hold all lines to be displayed, followed by a pointer showing the first line to print
 var lineBuffer = []string{"","","",""}
 var bufferIndex = 0
 
+// Open a connection to the display and register listeners
 func InitDisplay(addr string, uid string) {
 
 	ipcon = ipconnection.New()
@@ -19,9 +21,9 @@ func InitDisplay(addr string, uid string) {
 	lcd, _ = lcd_20x4_bricklet.New(uid, &ipcon) // Create device object.
 
 	ipcon.Connect(addr) // Connect to brickd.
-	// Don't use device before ipcon is connected.
 
-	lcd.BacklightOn()
+	ActivateDisplay()
+
 	lcd.RegisterButtonPressedCallback(func(button uint8) {
 		fmt.Printf("Button Pressed: %d\n", button)
 	})
@@ -31,6 +33,7 @@ func InitDisplay(addr string, uid string) {
 	})
 }
 
+// Adds a new line to the lineBuffer and writes the buffer to the display.
 func AppendText( text string ){
 	lineBuffer[bufferIndex] = text
 	bufferIndex = (bufferIndex + 1) % 4
@@ -38,6 +41,7 @@ func AppendText( text string ){
 	writeLines()
 }
 
+// Writes lineBuffer to the display, erasing everything written before.
 func writeLines(){
 	writeLine(lineBuffer[bufferIndex], 0)
 	writeLine(lineBuffer[(bufferIndex+ 1) % 4], 1)
@@ -45,6 +49,7 @@ func writeLines(){
 	writeLine(lineBuffer[(bufferIndex+ 3) % 4], 3)
 }
 
+// Writes a single line to the display while cutting it after 20 chars
 func writeLine( text string, line int ){
 	if len(text) > 20 {
 		runes := []rune(text)
