@@ -6,17 +6,16 @@ import (
 	"html"
 	"log"
 	"net/http"
-	"piDisplay/cmd/tinker"
+	"piDisplay/tinker"
 )
 
-func StartRESTServer(address string){
+func StartRESTServer(address string) {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/activate", activate)
 	r.HandleFunc("/deactivate", deactivate)
 	r.HandleFunc("/append/{text}", appendLine)
 	http.Handle("/", r)
-
 
 	log.Printf("Listening on %q", address)
 	log.Fatal(http.ListenAndServe(address, nil))
@@ -32,15 +31,15 @@ func handleRootAccess(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func activate(w http.ResponseWriter, r *http.Request){
+func activate(w http.ResponseWriter, r *http.Request) {
 	tinker.ActivateDisplay()
 }
 
-func deactivate(w http.ResponseWriter, r *http.Request){
+func deactivate(w http.ResponseWriter, r *http.Request) {
 	tinker.DeactivateDisplay()
 }
 
-func appendLine(w http.ResponseWriter, r *http.Request){
+func appendLine(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	tinker.AppendText(vars["text"])
 }

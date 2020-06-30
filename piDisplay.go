@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"piDisplay/cmd/restServer"
-	"piDisplay/cmd/tinker"
+	"piDisplay/restServer"
+	"piDisplay/tinker"
 )
 
 const ADDR string = "192.168.178.41:4223"
@@ -12,7 +12,7 @@ const version string = "0.1"
 
 func main() {
 
-	fmt.Printf("Starting main V%s", version)
+	fmt.Printf("Starting piDisplay V%s\n", version)
 	tinker.InitDisplay(ADDR, UID)
 
 	defer fmt.Println("Disconnected.")
@@ -25,5 +25,3 @@ func main() {
 	fmt.Scanln()
 
 }
-
-
